@@ -55,7 +55,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousPeriodic() {
-
+		
 	}
 
 	public void teleopInit() {
