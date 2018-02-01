@@ -3,9 +3,9 @@ package control_schemes;
 import configurations.RobotConfiguration;
 import edu.wpi.first.wpilibj.Joystick;
 
-public class ProgrammingRobotControlScheme extends RobotControlScheme {
+public class PowerUPRobotControlScheme extends RobotControlScheme {
 
-	public ProgrammingRobotControlScheme(RobotConfiguration robotConfiguration) {
+	public PowerUPRobotControlScheme(RobotConfiguration robotConfiguration) {
 		super(robotConfiguration);
 	}
 

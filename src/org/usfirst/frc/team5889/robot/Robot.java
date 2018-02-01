@@ -1,14 +1,14 @@
 package org.usfirst.frc.team5889.robot;
 
 import APIs.Chassis;
+import APIs.HybridWheels;
 import APIs.PneumaticsModule;
-import autonomous_recorder.AutonomousRecorder;
-import configurations.ProgrammingRobotConfiguration;
-import control_schemes.ProgrammingRobotControlScheme;
+import configurations.RobotConfiguration;
+import control_schemes.PowerUPRobotControlScheme;
+import control_schemes.RobotControlScheme;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -21,13 +21,13 @@ public class Robot extends IterativeRobot {
 	Joystick xbox;
 	
 	Chassis chassis;
+	HybridWheels hybridWheels;
+	
 	PneumaticsModule pneumaticsModule;
 	
-	ProgrammingRobotConfiguration robotConfiguration;
-	ProgrammingRobotControlScheme robotControlScheme;
-	
-	AutonomousRecorder autonomousRecorder;
-	
+	RobotConfiguration robotConfiguration;
+	PowerUPRobotControlScheme robotControlScheme;
+		
 	Timer timer = new Timer();
 	
 	//Joystick varables
@@ -36,10 +36,12 @@ public class Robot extends IterativeRobot {
 		
 	public void robotInit() {
 		chassis = new Chassis(0, 1, 2, 3);
+		hybridWheels = new HybridWheels(4, 5);
+		
 		pneumaticsModule = new PneumaticsModule(0, 1);
 		
-		robotConfiguration = new ProgrammingRobotConfiguration(chassis);
-		robotControlScheme = new ProgrammingRobotControlScheme(robotConfiguration);
+		robotConfiguration = new RobotConfiguration();
+		robotControlScheme = new PowerUPRobotControlScheme(robotConfiguration);
 		
 //		autonomousRecorder = new AutonomousRecorder();
 		
