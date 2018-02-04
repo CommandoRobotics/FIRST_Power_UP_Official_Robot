@@ -15,7 +15,8 @@ public class PowerUPRobotControlScheme extends RobotControlScheme {
 	}
 
 	public void updateJoysticksAndXBox(Joystick leftJoystick, Joystick rightJoystick, Joystick xbox) {
-		
+		leftJoystick(leftJoystick.getRawAxis(0), leftJoystick.getRawAxis(1));
+		rightJoystick(rightJoystick.getRawAxis(0), rightJoystick.getRawAxis(1));
 	}
 	
 	public void updateRobot() {

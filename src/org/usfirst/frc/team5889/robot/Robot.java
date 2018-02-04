@@ -2,10 +2,9 @@ package org.usfirst.frc.team5889.robot;
 
 import APIs.Chassis;
 import APIs.HybridWheels;
-import APIs.PneumaticsModule;
+import APIs.Pneumatics;
 import configurations.RobotConfiguration;
 import control_schemes.PowerUPRobotControlScheme;
-import control_schemes.RobotControlScheme;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -18,12 +17,14 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class Robot extends IterativeRobot {
 	//Controls
+	Joystick leftJoystick;
+	Joystick rightJoystick;
 	Joystick xbox;
 	
 	Chassis chassis;
-	HybridWheels hybridWheels;
 	
-	PneumaticsModule pneumaticsModule;
+	Pneumatics pneumatics;
+	HybridWheels hybridWheels;
 	
 	RobotConfiguration robotConfiguration;
 	PowerUPRobotControlScheme robotControlScheme;
@@ -36,9 +37,9 @@ public class Robot extends IterativeRobot {
 		
 	public void robotInit() {
 		chassis = new Chassis(0, 1, 2, 3);
-		hybridWheels = new HybridWheels(4, 5);
+		hybridWheels = new HybridWheels(4, 5, 6, 7);
 		
-		pneumaticsModule = new PneumaticsModule(0, 1);
+		pneumatics = new Pneumatics(0, 1);
 		
 		robotConfiguration = new RobotConfiguration();
 		robotControlScheme = new PowerUPRobotControlScheme(robotConfiguration);
@@ -52,7 +53,7 @@ public class Robot extends IterativeRobot {
 		timer.reset();
 		timer.start();
 		chassis.drive(0.5, 0.5);
-		timer.delay(3);
+		Timer.delay(3);
 		chassis.drive(0, 0);
 	}
 
