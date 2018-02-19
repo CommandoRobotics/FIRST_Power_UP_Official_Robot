@@ -4,29 +4,11 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 
 public class HybridWheels {
-	Spark leftWheels, rightWheels;
-	Solenoid leftSolenoid, rightSolenoid;
+	private Solenoid leftSolenoid, rightSolenoid;
 	
-	public HybridWheels(int leftWheelsPort, int rightWheelsPort, int leftSolenoidPort, int rightSolenoidPort) {
-		leftWheels = new Spark(leftWheelsPort);
-		rightWheels = new Spark(rightWheelsPort);
+	public HybridWheels(int leftSolenoidPort, int rightSolenoidPort) {
 		leftSolenoid = new Solenoid(leftSolenoidPort);
 		rightSolenoid = new Solenoid(rightSolenoidPort);
-	}
-	
-	public void pull(double power) {
-		leftWheels.set(power);
-		rightWheels.set(power);
-	}
-	
-	public void push(double power) {
-		leftWheels.set(-power);
-		rightWheels.set(-power);
-	}
-	
-	public void stop() {
-		leftWheels.set(0);
-		rightWheels.set(0);
 	}
 	
 	public void open() {
@@ -40,7 +22,10 @@ public class HybridWheels {
 	}
 	
 	public void toggleGrip() {
-		leftSolenoid.set(!leftSolenoid.get());
-		rightSolenoid.set(!rightSolenoid.get());
+		if(leftSolenoid.get() == rightSolenoid.get()) close();
+		else {
+			leftSolenoid.set(!leftSolenoid.get());
+			rightSolenoid.set(!rightSolenoid.get());
+		}
 	}
 }

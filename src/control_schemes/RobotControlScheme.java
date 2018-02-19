@@ -25,8 +25,19 @@ public abstract class RobotControlScheme {
 		left_joystick_trigger = right_joystick_trigger = a = b = y = x = left_bumper = right_bumper = false;
 	}
 	
-	public abstract void updateXBoxOnly(Joystick xbox);
-	public abstract void updateJoysticksAndXBox(Joystick leftJoystick, Joystick rightJoystick, Joystick xbox);
+	public void updateXBoxOnly(Joystick xbox) {
+		leftJoystick(0, -xbox.getRawAxis(XBOX_LEFT_Y));
+		rightJoystick(0, -xbox.getRawAxis(XBOX_RIGHT_Y));
+	}
+	
+	public void updateJoysticksAndXBox(Joystick leftJoystick, Joystick rightJoystick, Joystick xbox) {
+		leftJoystick(leftJoystick.getRawAxis(0), leftJoystick.getRawAxis(1));
+		rightJoystick(rightJoystick.getRawAxis(0), rightJoystick.getRawAxis(1));
+		gamepadY(xbox.getRawButton(XBOX_TOP));
+		gamepadX(xbox.getRawButton(XBOX_LEFT));
+		gamepadB(xbox.getRawButton(XBOX_RIGHT));
+		gamepadA(xbox.getRawButton(XBOX_BOTTOM));
+	}
 	
 	protected void leftJoystick(double x, double y) {left_joystick_x = x; left_joystick_y = y;}
 	protected void rightJoystick(double x, double y)  {right_joystick_x = x; right_joystick_y = y;}

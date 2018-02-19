@@ -3,15 +3,16 @@ package APIs;
 import edu.wpi.first.wpilibj.Compressor;
 
 public class Pneumatics {
-	Compressor compressor;
+	private Compressor compressor;
 	
-	public Pneumatics(int solenoidLeftPort, int solenoidRightPort) {
+	public Pneumatics() {
 		compressor = new Compressor(0);
 	}
 	
 	public void compressAirIfNeeded() {
-		if(compressor.getPressureSwitchValue()) stopCompressing();
-		else startCompressing();
+		System.out.println("Pressure Low: " + compressor.getPressureSwitchValue());
+		if(!compressor.getPressureSwitchValue()) startCompressing();
+		else stopCompressing();
 	}
 	
 	public void startCompressing() {

@@ -1,16 +1,27 @@
 package configurations;
 
 import APIs.Chassis;
-import APIs.PneumaticsModule;
+import APIs.HybridWheels;
+import APIs.Pneumatics;
+import APIs.Wench;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 public class RobotConfiguration {
-	private boolean chassisAdded, pneumaticsAdded;
+	private boolean chassisAdded, pneumaticsAdded, hybridWheelsAdded, wenchAdded, gyroscopeAdded;
 	private Chassis chassis;
-	private PneumaticsModule pneumaticsModule;
+	private Pneumatics pneumatics;
+	private HybridWheels hybridWheels;
+		private boolean toggled;
+	private Wench wench;
+	private Gyro gyroscope;
 	
 	public RobotConfiguration() {
 		chassisAdded = false;
 		pneumaticsAdded = false;
+		hybridWheelsAdded = false;
+			toggled = false;
+		wenchAdded = false;
+		gyroscopeAdded = false;
 	}
 	
 	public void addChassis(Chassis chassis) {
@@ -31,13 +42,47 @@ public class RobotConfiguration {
 		chassis.drive(leftY, rightY);
 	}
 	
-	public void addPneumaticsModule(PneumaticsModule pneumaticsModule) {
+	public void addPneumatics(Pneumatics pneumatics) {
 		pneumaticsAdded = true;
-		this.pneumaticsModule = pneumaticsModule;
+		this.pneumatics = pneumatics;
 	}
 	
 	public void updatePneumatics() {
 		if(!pneumaticsAdded) return;
-		pneumaticsModule.update();
+		pneumatics.compressAirIfNeeded();
+	}
+	
+	public void addHybridWheels(HybridWheels hybridWheels) {
+		hybridWheelsAdded = true;
+		this.hybridWheels = hybridWheels;
+	}
+	
+	public void updateHybridWheels(boolean toggleGrip) {
+		if(!hybridWheelsAdded) return;
+		if(toggleGrip && !toggled) {
+			hybridWheels.toggleGrip(); toggled = true;
+		} else if(!toggleGrip && toggled) toggled = false;
+	}
+	
+	public void addWench(Wench wench) {
+		wenchAdded = true;
+		this.wench = wench;
+	}
+	
+	public void updateWench(boolean up, boolean down) {
+		if(!wenchAdded) return;
+		if(up) wench.climb();
+		else if(down) wench.fall();
+		else wench.stop();
+	}
+	
+	public void addGyroscope(Gyro gyroscope) {
+		gyroscopeAdded = true;
+		this.gyroscope = gyroscope;
+		this.gyroscope.reset();
+	}
+	
+	public boolean getGyroscopeAdded() {
+		return gyroscopeAdded;
 	}
 }
