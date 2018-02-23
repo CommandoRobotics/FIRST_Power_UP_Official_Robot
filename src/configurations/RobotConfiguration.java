@@ -1,26 +1,31 @@
 package configurations;
 
 import APIs.Chassis;
+import APIs.Crown;
 import APIs.Gyroscope;
 import APIs.HybridWheels;
 import APIs.Pneumatics;
 import APIs.Wench;
 
 public class RobotConfiguration {
-	private boolean chassisAdded, pneumaticsAdded, hybridWheelsAdded, wenchAdded, gyroscopeAdded;
+	private boolean chassisAdded, pneumaticsAdded, hybridWheelsAdded, wenchAdded, crownAdded, gyroscopeAdded;
 	private Chassis chassis;
 	private Pneumatics pneumatics;
 	private HybridWheels hybridWheels;
-		private boolean toggled;
+		private boolean wheelsToggled;
 	private Wench wench;
+	private Crown crown;
+		private boolean crownToggled;
 	private Gyroscope gyroscope;
 	
 	public RobotConfiguration() {
 		chassisAdded = false;
 		pneumaticsAdded = false;
 		hybridWheelsAdded = false;
-			toggled = false;
+			wheelsToggled = false;
 		wenchAdded = false;
+		crownAdded = false;
+			crownToggled = false;
 		gyroscopeAdded = false;
 	}
 	
@@ -59,9 +64,9 @@ public class RobotConfiguration {
 	
 	public void updateHybridWheels(boolean toggleGrip) {
 		if(!hybridWheelsAdded) return;
-		if(toggleGrip && !toggled) {
-			hybridWheels.toggleGrip(); toggled = true;
-		} else if(!toggleGrip && toggled) toggled = false;
+		if(toggleGrip && !wheelsToggled) {
+			hybridWheels.toggleGrip(); wheelsToggled = true;
+		} else if(!toggleGrip && wheelsToggled) wheelsToggled = false;
 	}
 	
 	public void addWench(Wench wench) {
@@ -74,6 +79,18 @@ public class RobotConfiguration {
 		if(up) wench.climb();
 		else if(down) wench.fall();
 		else wench.stop();
+	}
+	
+	public void addCrown(Crown crown) {
+		crownAdded = true;
+		this.crown = crown;
+	}
+	
+	public void updateCrown(boolean toggleGrip) {
+		if(!crownAdded) return;
+		if(toggleGrip && !crownToggled) {
+			crown.togglePosition(); crownToggled = true;
+		} else if(!toggleGrip && crownToggled) crownToggled = false;
 	}
 	
 	public void addGyroscope(Gyroscope gyroscope) {

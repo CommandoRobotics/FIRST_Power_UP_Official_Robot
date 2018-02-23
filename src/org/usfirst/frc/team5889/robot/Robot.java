@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5889.robot;
 
 import APIs.Chassis;
+import APIs.Crown;
 import APIs.Gyroscope;
 import APIs.HybridWheels;
 import APIs.Pneumatics;
@@ -48,6 +49,7 @@ public class Robot extends IterativeRobot {
 	Pneumatics pneumatics;
 	HybridWheels hybridWheels;
 	Wench wench;
+	Crown crown;
 	Gyroscope gyroscope;
 	
 	DigitalInput limitSwitch;
@@ -68,13 +70,14 @@ public class Robot extends IterativeRobot {
 		pneumatics = new Pneumatics();
 		hybridWheels = new HybridWheels(5, 6);
 		wench = new Wench(5);
+		crown = new Crown(0, 1, 2, 3, 4, 7);
 		gyroscope = new Gyroscope();
 		
 		cameraOne = CameraServer.getInstance().startAutomaticCapture(0);
 		cameraTwo = CameraServer.getInstance().startAutomaticCapture(1);
 		limitSwitch = new DigitalInput(0);
 		
-		robotConfiguration = new PowerUPRobotConfiguration(chassis, pneumatics, hybridWheels, wench, gyroscope);
+		robotConfiguration = new PowerUPRobotConfiguration(chassis, pneumatics, hybridWheels, wench, crown, gyroscope);
 		
 		robotControlScheme = new PowerUPRobotControlScheme(robotConfiguration);
 		
@@ -104,7 +107,7 @@ public class Robot extends IterativeRobot {
 		gyroscope.reset();
 		String gameData = DriverStation.getInstance().getGameSpecificMessage();
 		int location = deriveRobotLocation();
-		if(autonomousChooser.getSelected().equals("Cross Auto Line")) crossAutoLine();
+		if(autonomousChooser.getSelected().equals("Cross Auto Line")) crossAutoLine(location, gameData);
 		else if(autonomousChooser.getSelected().equals("Drive To Switch And Drop")) driveToSwitchAndDrop(location, gameData);
 		else if(autonomousChooser.getSelected().equals("Drive To Scale And Drop")) driveToScaleAndDrop(location, gameData);
 	}
@@ -134,15 +137,46 @@ public class Robot extends IterativeRobot {
 		chassis.drive(0, 0);
 	}
 	
-	private void crossAutoLine() {
-		proceedForward(WALL_TO_AUTO_LINE + 3);
-		chassis.drive(0, 0);
+	private void crossAutoLine(int robotLocation, String gameData) {
+		if(robotLocation != CENTER) {
+			proceedForward(WALL_TO_AUTO_LINE + 3);
+			return;
+		} else {
+			//We want to go to the opposite side of our switch side to avoid interference.
+			int scoringPosition = deriveScoringPosition(gameData.charAt(0));
+			int relativeScoringPosition = scoringPosition - robotLocation;
+			
+			int initialDistance = 5;
+			
+			//Let's move forward off of the wall.
+			proceedForward(initialDistance);
+			Timer.delay(0.5);
+			
+			//We have now driven forward. We need to move away from our scoring location now. Then we can cross the line.
+			if(relativeScoringPosition < 0) {
+				rotate(90);
+				proceedForward(TO_OTHER_SIDE_OF_SWITCH * 0.5);
+				rotate(-90);
+			} else if(relativeScoringPosition > 0) {
+				rotate(-90);
+				proceedForward(TO_OTHER_SIDE_OF_SWITCH * 0.5);
+				rotate(90);
+			}
+			
+			//Finish by crossing the line.
+			proceedForward((WALL_TO_AUTO_LINE + 3) - initialDistance);
+		}
+	}
+	
+	private int deriveScoringPosition(char gameDataPosition) {
+		if(gameDataPosition == 'L') return LEFT;
+		if(gameDataPosition == 'R') return RIGHT;
+		return -1;
 	}
 	
 	private void driveToSwitchAndDrop(int robotLocation, String gameData) {
 		//1 is left, 3 is right
-		char correspondingColorPosition = gameData.charAt(0);
-		int scoringPosition = (correspondingColorPosition == 'L') ? 1 : ((correspondingColorPosition == 'R') ? 3 : 0);
+		int scoringPosition = deriveScoringPosition(gameData.charAt(0));
 		
 		//If this is negative, our robot needs to go left. If it is positive, our robot needs to go right.
 		//Otherwise, the scoring position is just ahead.
@@ -155,7 +189,7 @@ public class Robot extends IterativeRobot {
 		proceedForward(WALL_TO_SWITCH - adjustment);
 		Timer.delay(0.5);
 		
-		//We have now driven forward. If we are not lined up with our scoring location already, we need to move to the side now.
+		//We have now driven forward. If we are not lined up with our scoring location, we need to move to the correct side now.
 		//Otherwise, we can skip ahead to turning to face the switch.
 		if(relativeScoringPosition < 0) {
 			rotate(-90);
@@ -169,7 +203,7 @@ public class Robot extends IterativeRobot {
 			proceedForward(WALL_TO_SWITCH - adjustment);
 		}
 		
-		//Now we need to face the switch.
+		//Now we need to face the switch. First, we need to determine how we need to rotate.
 		double rotation = 0;
 		if(scoringPosition == LEFT) rotation = 90;
 		else if(scoringPosition == RIGHT) rotation = -90;
@@ -182,7 +216,7 @@ public class Robot extends IterativeRobot {
 	
 	private void driveToScaleAndDrop(int robotLocation, String gameData) {
 		//1 is left, 3 is right
-		char correspondingColorPosition = gameData.charAt(0);
+		char correspondingColorPosition = gameData.charAt(1);
 		int scoringPosition = (correspondingColorPosition == 'L') ? 1 : ((correspondingColorPosition == 'R') ? 3 : 0);
 		
 		//If this is negative, our robot needs to go left. If it is positive, our robot needs to go right.
