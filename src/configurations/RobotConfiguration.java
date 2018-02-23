@@ -1,10 +1,10 @@
 package configurations;
 
 import APIs.Chassis;
+import APIs.Gyroscope;
 import APIs.HybridWheels;
 import APIs.Pneumatics;
 import APIs.Wench;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 public class RobotConfiguration {
 	private boolean chassisAdded, pneumaticsAdded, hybridWheelsAdded, wenchAdded, gyroscopeAdded;
@@ -13,7 +13,7 @@ public class RobotConfiguration {
 	private HybridWheels hybridWheels;
 		private boolean toggled;
 	private Wench wench;
-	private Gyro gyroscope;
+	private Gyroscope gyroscope;
 	
 	public RobotConfiguration() {
 		chassisAdded = false;
@@ -76,7 +76,7 @@ public class RobotConfiguration {
 		else wench.stop();
 	}
 	
-	public void addGyroscope(Gyro gyroscope) {
+	public void addGyroscope(Gyroscope gyroscope) {
 		gyroscopeAdded = true;
 		this.gyroscope = gyroscope;
 		this.gyroscope.reset();

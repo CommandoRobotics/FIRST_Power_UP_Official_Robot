@@ -16,13 +16,13 @@ public abstract class RobotControlScheme {
 	
 	protected RobotConfiguration robotConfiguration;
 	public double left_joystick_x, left_joystick_y, right_joystick_x, right_joystick_y;
-	public boolean left_joystick_trigger, right_joystick_trigger, a, b, y, x, left_bumper, right_bumper;
+	public boolean left_joystick_trigger, right_joystick_trigger, right_joystick_thumb, a, b, y, x, left_bumper, right_bumper;
 	
 	public RobotControlScheme(RobotConfiguration robotConfiguration) {
 		this.robotConfiguration = robotConfiguration;
 		
 		left_joystick_x = left_joystick_y = right_joystick_x = right_joystick_y = 0;
-		left_joystick_trigger = right_joystick_trigger = a = b = y = x = left_bumper = right_bumper = false;
+		left_joystick_trigger = right_joystick_trigger = right_joystick_thumb = a = b = y = x = left_bumper = right_bumper = false;
 	}
 	
 	public void updateXBoxOnly(Joystick xbox) {
@@ -33,6 +33,9 @@ public abstract class RobotControlScheme {
 	public void updateJoysticksAndXBox(Joystick leftJoystick, Joystick rightJoystick, Joystick xbox) {
 		leftJoystick(leftJoystick.getRawAxis(0), leftJoystick.getRawAxis(1));
 		rightJoystick(rightJoystick.getRawAxis(0), rightJoystick.getRawAxis(1));
+		leftJoystickTrigger(leftJoystick.getRawButton(1));
+		rightJoystickTrigger(rightJoystick.getRawButton(1));
+		rightJoystickThumb(rightJoystick.getRawButton(2));
 		gamepadY(xbox.getRawButton(XBOX_TOP));
 		gamepadX(xbox.getRawButton(XBOX_LEFT));
 		gamepadB(xbox.getRawButton(XBOX_RIGHT));
@@ -43,6 +46,7 @@ public abstract class RobotControlScheme {
 	protected void rightJoystick(double x, double y)  {right_joystick_x = x; right_joystick_y = y;}
 	protected void leftJoystickTrigger(boolean pressed) {left_joystick_trigger = pressed;}
 	protected void rightJoystickTrigger(boolean pressed) {right_joystick_trigger = pressed;}
+	protected void rightJoystickThumb(boolean pressed) {right_joystick_thumb = pressed;}
 	protected void gamepadA(boolean pressed) {a = pressed;}
 	protected void gamepadB(boolean pressed) {b = pressed;}
 	protected void gamepadY(boolean pressed) {y = pressed;}

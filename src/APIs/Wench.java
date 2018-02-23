@@ -10,11 +10,11 @@ public class Wench {
 	}
 	
 	public void climb() {
-		wench.set(0.6);
+		wench.set(-0.8);
 	}
 	
 	public void fall() {
-		wench.set(-0.6);
+		wench.set(0.8);
 	}
 	
 	public void stop() {

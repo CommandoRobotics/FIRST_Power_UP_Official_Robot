@@ -1,7 +1,6 @@
 package APIs;
 
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Spark;
 
 public class HybridWheels {
 	private Solenoid leftSolenoid, rightSolenoid;
@@ -12,13 +11,13 @@ public class HybridWheels {
 	}
 	
 	public void open() {
-		leftSolenoid.set(true);
-		rightSolenoid.set(false);
+		leftSolenoid.set(false);
+		rightSolenoid.set(true);
 	}
 	
 	public void close() {
-		leftSolenoid.set(false);
-		rightSolenoid.set(true);
+		leftSolenoid.set(true);
+		rightSolenoid.set(false);
 	}
 	
 	public void toggleGrip() {

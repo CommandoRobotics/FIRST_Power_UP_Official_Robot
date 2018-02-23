@@ -1,13 +1,13 @@
 package configurations;
 
 import APIs.Chassis;
+import APIs.Gyroscope;
 import APIs.HybridWheels;
 import APIs.Pneumatics;
 import APIs.Wench;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 public class PowerUPRobotConfiguration extends RobotConfiguration{
-	public PowerUPRobotConfiguration(Chassis chassis, Pneumatics pneumatics, HybridWheels hybridWheels, Wench wench, Gyro gyroscope) {
+	public PowerUPRobotConfiguration(Chassis chassis, Pneumatics pneumatics, HybridWheels hybridWheels, Wench wench, Gyroscope gyroscope) {
 		this.addChassis(chassis);
 		this.addPneumatics(pneumatics);
 		this.addHybridWheels(hybridWheels);
